@@ -18,9 +18,16 @@ from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from rclpy.node import Node
 
+pi = math.pi
+
+
+
 # ===== TODO: puntos de SU variante: (x [m], y [m], θ [rad]) =====
 PUNTOS = [
-    # (x, y, theta),
+    (2.5, 0.0,  pi/2),
+    (2.5, 1.0,  pi/2),
+    (0.0, 1.0, -pi/2),
+    (0.0, 0.0,  0.0),
 ]
 
 L1, L2, L3 = 1.0, 1.0, 1.5     # Λ = diag(λ1, λ2, λ3)
@@ -36,6 +43,8 @@ def envolver(a):
 
 
 def ley_control(pose, meta):
+    x, y, phi = pose
+    xd, yd, thetad = meta
     """
     Ec. (21) con η̇d = 0. Función pura (sin ROS) para poder probarla fuera de Gazebo.
 
@@ -43,9 +52,27 @@ def ley_control(pose, meta):
     Devuelve (u, v, r, alcanzado)
     """
     # TODO 1: errores de posición (en odom) y de orientación (envuelto)
+    ex = xd - x
+    ey = yd - y
+    ephi = envolver(thetad - phi)
     # TODO 2: ¿alcanzado? (TOL_POS y TOL_ANG) -> devolver 0, 0, 0, True
+    if math.sqrt(ex**2 + ey**2) < TOL_POS and abs(ephi) < TOL_ANG:
+        return 0.0, 0.0, 0.0, True
     # TODO 3: ξ = J(φ)⁺ Λ e
+    cos, sin = math.cos(phi), math.sin(phi)
+    ax, ay, ath = L1*ex, L2*ey, L3*ephi
+    u = cos*ax + sin*ay
+    v = -sin*ax + cos*ay
+    r = ath
+
     # TODO 4: saturar la NORMA de (u, v) a V_MAX conservando la dirección, y |r| a R_MAX
+    norm = math.sqrt(u**2 + v**2)
+    if norm > V_MAX:
+        u = u * V_MAX / norm
+        v = v * V_MAX / norm
+    if abs(r) > R_MAX:
+        r = R_MAX * (r / abs(r))
+    return u, v, r, False
     raise NotImplementedError
 
 
