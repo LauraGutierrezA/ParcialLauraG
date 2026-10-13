@@ -20,6 +20,8 @@
   <xacro:property name="update_rate" value="${8}"/>
   <xacro:property name="samples" value="${2000}"/>
   <xacro:property name="lidar_masa" value="${0.190}"/>
+  <xacro:property name="max_range" value="${25}"/>
+  <xacro:property name="min_range" value="${0.2}"/>
 
   <!-- Camara (asignado) -->
   <xacro:property name="x_camara" value="${0.2}"/>
@@ -149,13 +151,13 @@
           <horizontal>
             <samples>${samples}</samples>          <!-- muestras por vuelta -->
             <resolution>1</resolution>
-            <min_angle>-pi</min_angle>
-            <max_angle>pi</max_angle>
+            <min_angle>${-pi}</min_angle>
+            <max_angle>${pi}</max_angle>
           </horizontal>
         </scan>
         <range>
-          <min>0.2</min>
-          <max>10</max>
+          <min>${min_range}</min>
+          <max>${max_range}</max>
           <resolution>0.01</resolution>
         </range>
       </lidar>
