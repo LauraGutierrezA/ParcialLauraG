@@ -25,20 +25,16 @@
   <xacro:property name="x_camera" value="${0.2}"/>
   <xacro:property name="z_camera" value="${0.1}"/>
   <xacro:property name="camera_masa" value="${0.31}"/>
-  <xacro:property name="clip_near_d" value="${0.4}"/>
+  <xacro:property name="clip_near_d" value="${0.6}"/>
   <xacro:property name="clip_far_d" value="${8.0}"/>
   <xacro:property name="clip_near" value="${0.4}"/>
-  <xacro:property name="clip_far" value="${8.0}"/>
+  <xacro:property name="clip_far" value="${2.0}"/>
   <xacro:property name="w_camera" value="${0.165}"/>
   <xacro:property name="h_camera" value="${0.048}"/>
   <xacro:property name="d_camera" value="${0.04}"/>
   <xacro:property name="update_rate" value="${15}"/>
   <xacro:property name="image_width" value="${640}"/>
   <xacro:property name="horizontal_fov" value="${1.01927}"/> 
-
-
-
-
 
   <!-- Chasis (dado) -->
   <xacro:property name="chasis_largo" value="${distancia_ejes + 0.04}"/>
@@ -255,8 +251,11 @@
   </xacro:macro>
 
   <gazebo>
-    <xacro:motor prefijo="del_izq"/>
     <!-- TODO: motores de del_der, tra_izq y tra_der -->
+    <xacro:motor prefijo="del_izq"/>
+    <xacro:motor prefijo="del_der"/>
+    <xacro:motor prefijo="tra_izq"/>
+    <xacro:motor prefijo="tra_der"/>
 
     <!-- TODO: plugin gz-sim-joint-state-publisher-system (encoders) -->
   </gazebo>
